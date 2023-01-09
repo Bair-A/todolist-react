@@ -1,10 +1,14 @@
 import React from 'react';
-import TaskСount from "./TaskCount";
+import TaskInput from "./TaskInput";
+import AddTaskBtn from "./AddTaskBtn";
+import ClearAllBtn from "./ClearAllBtn";
 
-const TodoHeader = () => {
+const TodoHeader = ({createTask, setText, clearAll}) => {
     return (
-        <div className = 'todo-header'>
-            <TaskСount/>
+        <div className='todo-header'>
+            <TaskInput setText={setText}/>
+            <AddTaskBtn createTask={createTask}/>
+            <ClearAllBtn clearAll={clearAll}/>
         </div>
     );
 };

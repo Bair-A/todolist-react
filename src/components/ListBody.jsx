@@ -1,19 +1,36 @@
 import React, {useState} from 'react';
-import TaskСount from "./TaskCount";
-import MainAddTaskBtn from "./MainAddTaskBtn"
+import TodoHeader from "./TodoHeader";
+
+const LOCAL_STORAGE_KEY = 'todoArr';
 
 const ListBody = () => {
-    const [count, setCount] = useState(0);
-    const [toggled, setToggled] = useState(false);
+    const [text, setText] = useState('');
+    const [taskArr, setTaskArr] = useState(JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || []);
+    const setLocalStorage = (value) => localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(value));
+    const createTask = () => {
+            setTaskArr(curr => {
+                const newTaskArr = [...curr, {text, completed: false, id: +new Date()}];
+                setLocalStorage(newTaskArr);
+                return newTaskArr
+            });
+
+        };
+    const clearAll = () => {
+        localStorage.removeItem(LOCAL_STORAGE_KEY);
+        setTaskArr([]);
+    };
 
     return (
-        <div className='list-body'>
+        <div className="list-body">
             <div className="container">
-                <TaskСount count={count}/>
+                <TodoHeader setText={setText} createTask={createTask} clearAll={clearAll}/>
                 <ul>
-
+                    {taskArr.map(item =>
+                        <li key={item.id}>
+                            {item.text}
+                        </li>
+                    )}
                 </ul>
-                <MainAddTaskBtn setCount={setCount} toggled={toggled}/>
             </div>
         </div>
     );

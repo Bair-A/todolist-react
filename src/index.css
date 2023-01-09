@@ -15,3 +15,12 @@ code {
 .todo-header {
   display: flex;
 }
+
+.list-body{
+  width: 100px;
+  height: 100vh;
+}
+
+.list-body.active {
+  background-color: red;
+}
