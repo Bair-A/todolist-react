@@ -1,8 +1,8 @@
 import React from 'react';
 
-const TaskInput = ({setText}) => {
+const TaskInput = ({setText, value}) => {
     return (
-        <input type="text" placeholder="iput task" onBlur={(e) => setText(e.target.value)}/>
+        <input value={value} type="text" placeholder="iput task" onChange={(e) => setText(e.target.value)}/>
     );
 };
 

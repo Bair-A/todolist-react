@@ -3,10 +3,10 @@ import TaskInput from "./TaskInput";
 import AddTaskBtn from "./AddTaskBtn";
 import ClearAllBtn from "./ClearAllBtn";
 
-const TodoHeader = ({createTask, setText, clearAll}) => {
+const TodoHeader = ({createTask, setText, clearAll, value}) => {
     return (
         <div className='todo-header'>
-            <TaskInput setText={setText}/>
+            <TaskInput setText={setText} value={value}/>
             <AddTaskBtn createTask={createTask}/>
             <ClearAllBtn clearAll={clearAll}/>
         </div>
