@@ -6,24 +6,28 @@ const LOCAL_STORAGE_KEY = 'todoArr';
 
 const ListBody = () => {
     const [text, setText] = useState('');
-    const [taskArr, setTaskArr] = useState(JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || {});
+    const [taskObj, setTaskObj] = useState(JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || {});
     const setLocalStorage = (value) => localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(value));
     const createTask = () => {
-            if (text.trim() === '') return taskArr
-            setTaskArr(curr => {
+            if (text.trim() === '') return taskObj
+            setTaskObj(curr => {
                 const idTask = +new Date();
-                const newTaskArr = {...curr, [idTask]: {text, completed: false, id: idTask}};
-                setLocalStorage(newTaskArr);
-                return newTaskArr
+                const newTaskObj = {...curr, [idTask]: {text, completed: false, id: idTask}};
+                setLocalStorage(newTaskObj);
+                return newTaskObj
             });
-
         };
+    const handleChange = (e, key) => {
+        if (taskObj[key].text === e.target.value || e.target.value.trim() === '') return
+        taskObj[key].text = e.target.value;
+        setLocalStorage(taskObj)
+    }
     const clearAll = () => {
         localStorage.removeItem(LOCAL_STORAGE_KEY);
-        setTaskArr([]);
+        setTaskObj([]);
     };
     const handleDelete = (id) => {
-        setTaskArr(curr => {
+        setTaskObj(curr => {
             const newObj = {...curr};
             delete newObj[id];
             setLocalStorage(newObj);
@@ -36,9 +40,9 @@ const ListBody = () => {
             <div className="container">
                 <TodoHeader value={text} setText={setText} createTask={createTask} clearAll={clearAll}/>
                 <ul>
-                    {Object.values(taskArr).map(item =>
+                    {Object.values(taskObj).map(item =>
                         <li key={item.id}>
-                            {item.text}
+                            <input onBlur={(e) => handleChange(e, item.id)} defaultValue={item.text}/>
                             <DeleteTaskBtn onClick={() => handleDelete(item.id)}/>
                         </li>
                     )}
