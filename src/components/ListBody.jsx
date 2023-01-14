@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import TodoHeader from "./TodoHeader";
-import DeleteTaskBtn from "./DeleteTaskBtn";
-import {Form} from "react-bootstrap";
+import {Form, Button, Row, Col} from "react-bootstrap";
 
 const LOCAL_STORAGE_KEY = 'todoArr';
 
@@ -18,15 +17,15 @@ const ListBody = () => {
     );
     const [text, setText] = useState('');
     const createTask = () => {
-            if (text.trim() === '') return
-            setText('');
-            setTaskObj(curr => {
-                const idTask = +new Date();
-                const newTaskObj = makeCopy(curr);
-                newTaskObj[idTask] = {text, completed: false, id: idTask};
-                return newTaskObj
-            });
-        };
+        if (text.trim() === '') return
+        setText('');
+        setTaskObj(curr => {
+            const idTask = +new Date();
+            const newTaskObj = makeCopy(curr);
+            newTaskObj[idTask] = {text, completed: false, id: idTask};
+            return newTaskObj
+        });
+    };
     const handleChange = (e, key) => {
         if (taskObj[key].text === e.target.value || e.target.value.trim() === '') return
         setTaskObj((curr) => {
@@ -58,15 +57,26 @@ const ListBody = () => {
         <div className="list-body">
             <div className="container">
                 <TodoHeader value={text} setText={setText} createTask={createTask} clearAll={clearAll}/>
-                <ul>
+                <div>
                     {Object.values(taskObj).map(item =>
-                        <li key={item.id}>
-                            <Form.Check type="checkbox" defaultChecked={item.completed} onClick={() => handleToggleCheck(item.id)}/>
-                            <input onBlur={(e) => handleChange(e, item.id)} defaultValue={item.text}/>
-                            <DeleteTaskBtn onClick={() => handleDelete(item.id)}/>
-                        </li>
+                        <Form.Group className="mt-3" controlId="formBasicPassword" key={item.id}>
+                            <Row>
+                                <Col xs="auto">
+                                    <Form.Check type="checkbox" defaultChecked={item.completed}
+                                                onClick={() => handleToggleCheck(item.id)}/>
+                                </Col>
+                                <Col xs="auto">
+                                    <Form.Control type="text" onBlur={(e) => handleChange(e, item.id)}
+                                                  defaultValue={item.text}/>
+                                </Col>
+                                <Col xs="auto">
+                                    <Button variant="primary" onClick={() => handleDelete(item.id)}>
+                                        delete
+                                    </Button></Col>
+                            </Row>
+                        </Form.Group>
                     )}
-                </ul>
+                </div>
             </div>
         </div>
     );
