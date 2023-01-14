@@ -1,6 +1,7 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import TodoHeader from "./TodoHeader";
 import DeleteTaskBtn from "./DeleteTaskBtn";
+import {Form} from "react-bootstrap";
 
 const LOCAL_STORAGE_KEY = 'todoArr';
 
@@ -8,22 +9,31 @@ const setLocalStorage = (value) => localStorage.setItem(LOCAL_STORAGE_KEY, JSON.
 const makeCopy = (curr) => JSON.parse(JSON.stringify(curr));
 
 const ListBody = () => {
-    const [text, setText] = useState('');
     const [taskObj, setTaskObj] = useState(JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || {});
+    useEffect(
+        () => {
+            setLocalStorage(taskObj)
+        },
+        [taskObj],
+    );
+    const [text, setText] = useState('');
     const createTask = () => {
-            if (text.trim() === '') return taskObj
+            if (text.trim() === '') return
+            setText('');
             setTaskObj(curr => {
                 const idTask = +new Date();
                 const newTaskObj = makeCopy(curr);
                 newTaskObj[idTask] = {text, completed: false, id: idTask};
-                setLocalStorage(newTaskObj);
                 return newTaskObj
             });
         };
     const handleChange = (e, key) => {
         if (taskObj[key].text === e.target.value || e.target.value.trim() === '') return
-        taskObj[key].text = e.target.value;
-        setLocalStorage(taskObj)
+        setTaskObj((curr) => {
+            const newTaskObj = makeCopy(curr);
+            newTaskObj[key].text = e.target.value
+            return newTaskObj
+        })
     }
     const clearAll = () => {
         localStorage.removeItem(LOCAL_STORAGE_KEY);
@@ -33,7 +43,6 @@ const ListBody = () => {
         setTaskObj(curr => {
             const newObj = makeCopy(curr);
             delete newObj[id];
-            setLocalStorage(newObj);
             return newObj
         });
     }
@@ -41,7 +50,6 @@ const ListBody = () => {
         setTaskObj((curr) => {
             const newTaskObj = makeCopy(curr);
             newTaskObj[key].completed = !(newTaskObj[key].completed);
-            setLocalStorage(newTaskObj);
             return newTaskObj
         })
     }
@@ -53,7 +61,7 @@ const ListBody = () => {
                 <ul>
                     {Object.values(taskObj).map(item =>
                         <li key={item.id}>
-                            <input type="checkbox" defaultChecked={item.completed} onClick={() => handleToggleCheck(item.id)}/>
+                            <Form.Check type="checkbox" defaultChecked={item.completed} onClick={() => handleToggleCheck(item.id)}/>
                             <input onBlur={(e) => handleChange(e, item.id)} defaultValue={item.text}/>
                             <DeleteTaskBtn onClick={() => handleDelete(item.id)}/>
                         </li>

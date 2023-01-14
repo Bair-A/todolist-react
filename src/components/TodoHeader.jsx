@@ -1,15 +1,22 @@
 import React from 'react';
-import TaskInput from "./TaskInput";
-import AddTaskBtn from "./AddTaskBtn";
-import ClearAllBtn from "./ClearAllBtn";
+import {Button, Form} from "react-bootstrap";
 
 const TodoHeader = ({createTask, setText, clearAll, value}) => {
     return (
-        <div className='todo-header'>
-            <TaskInput setText={setText} value={value}/>
-            <AddTaskBtn createTask={createTask}/>
-            <ClearAllBtn clearAll={clearAll}/>
-        </div>
+        <Form>
+            <Form.Group className="mb-3">
+                <Form.Label>Add task</Form.Label>
+                <Form.Control placeholder="input task" value={value} type="text" onChange={(e) => setText(e.target.value)}/>
+            </Form.Group>
+            <Form.Group>
+                <Button variant="success" onClick={() => createTask()}>
+                    add task
+                </Button>
+                <Button className="ms-3" variant="danger" onClick={() => clearAll()}>
+                    clear tasks
+                </Button>
+            </Form.Group>
+        </Form>
     );
 };
 
