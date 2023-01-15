@@ -4,7 +4,7 @@ import {Button, Form} from "react-bootstrap";
 const TodoHeader = ({createTask, setText, clearAll, value}) => {
     return (
         <Form>
-            <Form.Group className="mb-3">
+            <Form.Group className="mb-3 mt-3">
                 <Form.Label>Add task</Form.Label>
                 <Form.Control placeholder="input task" value={value} type="text" onChange={(e) => setText(e.target.value)}/>
             </Form.Group>

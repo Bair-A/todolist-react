@@ -60,19 +60,20 @@ const ListBody = () => {
                 <div>
                     {Object.values(taskObj).map(item =>
                         <Form.Group className="mt-3" controlId="formBasicPassword" key={item.id}>
-                            <Row>
+                            <Row className="align-items-center">
                                 <Col xs="auto">
                                     <Form.Check type="checkbox" defaultChecked={item.completed}
                                                 onClick={() => handleToggleCheck(item.id)}/>
                                 </Col>
-                                <Col xs="auto">
-                                    <Form.Control type="text" onBlur={(e) => handleChange(e, item.id)}
+                                <Col>
+                                    <Form.Control className={item.completed ? 'text-decoration-line-through' : ''} type="text" onBlur={(e) => handleChange(e, item.id)}
                                                   defaultValue={item.text}/>
                                 </Col>
                                 <Col xs="auto">
                                     <Button variant="primary" onClick={() => handleDelete(item.id)}>
                                         delete
-                                    </Button></Col>
+                                    </Button>
+                                </Col>
                             </Row>
                         </Form.Group>
                     )}
