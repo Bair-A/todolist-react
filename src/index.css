@@ -7,19 +7,18 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.task-input {
+  border-width: 0 0 1px 0;
+  border-style: solid;
+  border-color: rgba(33, 37, 41, 0.25);
+  border-radius: 0;
+  box-shadow: none;
 }
 
-.todo-header {
-  display: flex;
+.task-input:focus {
+  box-shadow: none;
 }
 
-.list-body{
-  height: 100vh;
-}
-
-.list-body.active {
-  background-color: red;
+.task-item:last-child .task-input{
+  border: 0;
 }

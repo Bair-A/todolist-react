@@ -59,14 +59,14 @@ const ListBody = () => {
                 <TodoHeader value={text} setText={setText} createTask={createTask} clearAll={clearAll}/>
                 <div>
                     {Object.values(taskObj).map(item =>
-                        <Form.Group className="mt-3" controlId="formBasicPassword" key={item.id}>
+                        <Form.Group className="mt-3 task-item" key={item.id}>
                             <Row className="align-items-center">
                                 <Col xs="auto">
                                     <Form.Check type="checkbox" defaultChecked={item.completed}
                                                 onClick={() => handleToggleCheck(item.id)}/>
                                 </Col>
                                 <Col>
-                                    <Form.Control className={item.completed ? 'text-decoration-line-through' : ''} type="text" onBlur={(e) => handleChange(e, item.id)}
+                                    <Form.Control className={item.completed ? "text-decoration-line-through task-input " : "task-input "} type="text" onBlur={(e) => handleChange(e, item.id)}
                                                   defaultValue={item.text}/>
                                 </Col>
                                 <Col xs="auto">
