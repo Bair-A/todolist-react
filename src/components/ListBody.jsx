@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import TodoHeader from "./TodoHeader";
-import {Form, Button, Row, Col, Badge} from "react-bootstrap";
+import {Form, Button, Row, Col} from "react-bootstrap";
+import TaskCounter from "./TaskCounter";
 
 const LOCAL_STORAGE_KEY = 'todoArr';
 
@@ -8,6 +9,7 @@ const setLocalStorage = (value) => localStorage.setItem(LOCAL_STORAGE_KEY, JSON.
 const makeCopy = (curr) => JSON.parse(JSON.stringify(curr));
 
 const ListBody = () => {
+    const [importantTask, setImportantTask] = useState(false);
     const [taskObj, setTaskObj] = useState(JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || {});
     useEffect(
         () => {
@@ -17,12 +19,17 @@ const ListBody = () => {
     );
     const [text, setText] = useState('');
     const createTask = () => {
-        if (text.trim() === '') return
+        setImportantTask(false);
+        if (text.trim() === '') {
+            return
+        }
         setText('');
         setTaskObj(curr => {
             const idTask = +new Date();
             const newTaskObj = makeCopy(curr);
-            newTaskObj[idTask] = {text, completed: false, id: idTask};
+            const important = importantTask;
+            newTaskObj[idTask] = {text, completed: false, id: idTask, important};
+            console.log(newTaskObj)
             return newTaskObj
         });
     };
@@ -52,16 +59,24 @@ const ListBody = () => {
             return newTaskObj
         })
     }
-
+    const taskArr = Object.values(taskObj);
     return (
         <div className="list-body">
             <div className="container">
-                <Badge badgeContent={4} color="primary">
-
-                </Badge>
-                <TodoHeader value={text} setText={setText} createTask={createTask} clearAll={clearAll}/>
+                <Row className="mt-3 mb-1 flex-row-reverse">
+                    <Col xs="auto">
+                        <TaskCounter bgColor={"primary"} value={taskArr.length} countName={"TOTAL COUNT"}/>
+                    </Col>
+                    <Col xs="auto">
+                        <TaskCounter bgColor={"secondary"} value={taskArr.filter(item =>  item.completed).length} countName={"COMPLETED"}/>
+                    </Col>
+                    <Col xs="auto">
+                        <TaskCounter bgColor={"warning"} value={taskArr.filter(item => !item.completed).length} countName={"WAITING"}/>
+                    </Col>
+                </Row>
+                <TodoHeader value={text} setText={setText} createTask={createTask} importantTask={importantTask} clearAll={clearAll} setImportantTask={setImportantTask}/>
                 <div>
-                    {Object.values(taskObj).map(item =>
+                    {taskArr.map(item =>
                         <Form.Group className="mt-3 task-item" key={item.id}>
                             <Row className="align-items-center">
                                 <Col xs="auto">
@@ -69,7 +84,7 @@ const ListBody = () => {
                                                 onClick={() => handleToggleCheck(item.id)}/>
                                 </Col>
                                 <Col>
-                                    <Form.Control className={item.completed ? "text-decoration-line-through task-input " : "task-input "} type="text" onBlur={(e) => handleChange(e, item.id)}
+                                    <Form.Control className={item.completed ? "text-decoration-line-through task-input text-secondary" : "task-input"} type="text" onBlur={(e) => handleChange(e, item.id)}
                                                   defaultValue={item.text}/>
                                 </Col>
                                 <Col xs="auto">
