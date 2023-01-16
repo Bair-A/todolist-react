@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import TodoHeader from "./TodoHeader";
-import {Form, Button, Row, Col} from "react-bootstrap";
+import {Form, Button, Row, Col, Badge} from "react-bootstrap";
 
 const LOCAL_STORAGE_KEY = 'todoArr';
 
@@ -56,6 +56,9 @@ const ListBody = () => {
     return (
         <div className="list-body">
             <div className="container">
+                <Badge badgeContent={4} color="primary">
+
+                </Badge>
                 <TodoHeader value={text} setText={setText} createTask={createTask} clearAll={clearAll}/>
                 <div>
                     {Object.values(taskObj).map(item =>
