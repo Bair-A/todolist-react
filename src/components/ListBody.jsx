@@ -3,6 +3,8 @@ import TodoHeader from "./TodoHeader";
 import {Form, Button, Row, Col} from "react-bootstrap";
 import TaskCounter from "./TaskCounter";
 import classNames from 'classnames/bind';
+import CounterRow from "./CounterRow";
+import Task from "./Task";
 
 const LOCAL_STORAGE_KEY = 'todoArr';
 
@@ -43,6 +45,8 @@ const ListBody = () => {
     })
   }
   const clearAll = () => {
+    setText('');
+    setImportantTask(false);
     localStorage.removeItem(LOCAL_STORAGE_KEY);
     setTaskObj({});
   };
@@ -65,51 +69,11 @@ const ListBody = () => {
   return (
     <div className="list-body">
       <div className="container">
-        <Row className="mt-3 mb-1 flex-row-reverse">
-          <Col xs="auto">
-            <TaskCounter bgColor={"primary"} value={taskArr.length} countName={"TOTAL COUNT"}/>
-          </Col>
-          <Col xs="auto">
-            <TaskCounter bgColor={"secondary"} value={taskArr.filter(item => item.completed).length}
-                         countName={"COMPLETED"}/>
-          </Col>
-          <Col xs="auto">
-            <TaskCounter bgColor={"warning"} value={taskArr.filter(item => !item.completed).length}
-                         countName={"WAITING"}/>
-          </Col>
-        </Row>
+        <CounterRow taskArr={taskArr}/>
         <TodoHeader value={text} setText={setText} createTask={createTask} importantTask={importantTask}
                     clearAll={clearAll} setImportantTask={setImportantTask}/>
         <div>
-          {taskArr.map(item => {
-              const taskClass = classNames(
-                "task-input",
-                {
-                  "text-decoration-line-through": item.completed,
-                  "text-secondary": item.completed,
-                  "text-danger": item.important,
-                  "fw-bold": item.important,
-                })
-              return <Form.Group className="mt-3 task-item" key={item.id}>
-                <Row className="align-items-center">
-                  <Col xs="auto">
-                    <Form.Check type="checkbox" defaultChecked={item.completed}
-                                onClick={() => handleToggleCheck(item.id)}/>
-                  </Col>
-                  <Col>
-                    <Form.Control
-                      className={taskClass}
-                      type="text" onBlur={(e) => handleChange(e, item.id)}
-                      defaultValue={item.text}/>
-                  </Col>
-                  <Col xs="auto">
-                    <Button variant="primary" onClick={() => handleDelete(item.id)}>
-                      delete
-                    </Button>
-                  </Col>
-                </Row>
-              </Form.Group>;
-            }
+          {taskArr.map(item => <Task item={item} handleChange={handleChange} handleDelete={handleDelete} handleToggleCheck={handleToggleCheck}/>
           )}
         </div>
       </div>
